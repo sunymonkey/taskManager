@@ -1,17 +1,21 @@
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
-
 
 public class taskManager {
     public static void main(String[] args) {
 
         String[][] tabs = readFile("tasks.csv");
+        int quit = 0;
 
-        while (true) {
+        while (quit == 0) {
             System.out.println(ConsoleColors.BLUE_BOLD + "Please select an option: ");
             System.out.println(ConsoleColors.RESET + "add");
             System.out.println("remove");
@@ -21,18 +25,20 @@ public class taskManager {
             String menu = scanner.nextLine();
             switch (menu) {
                 case "add":
-                    System.out.println("add");
+                    //System.out.println("add");
                     tabs = add(tabs);
                     break;
                 case "remove":
-                    System.out.println("remove");
+                    //System.out.println("remove");
+                    tabs = remove(tabs);
                     break;
                 case "list":
-                    System.out.println("list");
+                    //System.out.println("list");
                     list(tabs);
                     break;
                 case "exit":
-                    System.out.println("exit");
+                    //System.out.println("exit");
+                    quit = quit(tabs);
                     break;
                 default: {
                     System.out.println("Błędna komenda");
@@ -41,6 +47,33 @@ public class taskManager {
         }
 
 
+    }
+
+    private static int quit(String[][] tabs) {
+        List<String> list = new ArrayList<>();
+
+        for (int i = 0; i < tabs.length; i++) {
+            list.add(tabs[i][0] + ", " + tabs[i][1] + ", " + tabs[i][2]);
+        }
+        Path path = Paths.get("tasks.csv");
+
+        try {
+            Files.write(path, list);
+            System.out.println(ConsoleColors.RED + "Bye, Bye.");
+        } catch (IOException e) {
+            System.out.println("Problem z zapisem do pliku! " + e.getMessage());
+        }
+
+        //tasks.csv
+        return 1;
+    }
+
+    private static String[][] remove(String[][] tabs) {
+        System.out.println("Please select number to remove.");
+        Scanner scanner = new Scanner(System.in);
+        int index = scanner.nextInt();
+        tabs = ArrayUtils.remove(tabs, index);
+        return tabs;
     }
 
     private static String[][] readFile(String fileName) {
@@ -80,9 +113,7 @@ public class taskManager {
     }
 
 
-
     private static void list(String[][] tabs) {
-
         // wyswietlam liste:
         for (int i = 0; i < tabs.length; i++) {
             System.out.println(i + ":  " + tabs[i][0] + "  " + tabs[i][1] + "  " + tabs[i][2]);
