@@ -1,5 +1,4 @@
 import org.apache.commons.lang3.ArrayUtils;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,8 +11,8 @@ public class taskManager {
     public static void main(String[] args) {
         String filename = "tasks.csv";
         String[][] tabs = readFile(filename);
-        boolean state = true;
 
+        boolean state = true;
         while(state) {
             menuPrint();
             Scanner scanner = new Scanner(System.in);
@@ -67,7 +66,7 @@ public class taskManager {
                 scanner.next();
                 index = -1;
             }
-            if(index < 0 || index > tabs.length){
+            if(index < 0 || index > tabs.length - 1){
                 System.out.println("Incorrect argument passed. Please give number greater or equal 0");
             } else {
                 break;
@@ -94,11 +93,11 @@ public class taskManager {
                     tabs[tabs.length-1][2] = parts[2];
                 }
             } catch (IOException e) {
-                System.out.println("Problem z plikiem " + e.getMessage());
+                System.out.println("Access error" + e.getMessage());
             }
         } else {
-            System.out.println(ConsoleColors.RED + "Plik nie istnieje/brak zadań do wykonania!" + ConsoleColors.RESET);
-        }
+            System.out.println(ConsoleColors.RED + "File no exist" + ConsoleColors.RESET);
+    }
 
         return tabs;
     }
@@ -142,7 +141,7 @@ public class taskManager {
 
     private static void list(String[][] tabs) {
         if (tabs.length == 0) {
-            System.out.println(ConsoleColors.RED + "Brak zadań do wykonania!" + ConsoleColors.RESET);
+            System.out.println(ConsoleColors.RED + "No task!" + ConsoleColors.RESET);
         } else {
             for (int i = 0; i < tabs.length; i++) {
                 System.out.println(i + ":  " + tabs[i][0] + "  " + tabs[i][1] + "  " + tabs[i][2]);
