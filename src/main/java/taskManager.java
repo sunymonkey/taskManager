@@ -12,8 +12,7 @@ public class taskManager {
         String filename = "tasks.csv";
         String[][] tabs = readFile(filename);
 
-        boolean state = true;
-        while(state) {
+        while(true) {
             menuPrint();
             Scanner scanner = new Scanner(System.in);
             String menu = scanner.nextLine().trim();
@@ -23,7 +22,6 @@ public class taskManager {
                 case "list" -> list(tabs);
                 case "exit" -> {
                     quit(tabs, filename);
-                    state = false;
                 }
                 default -> System.out.println("Błędna komenda");
             }
@@ -53,6 +51,7 @@ public class taskManager {
         } catch (IOException e) {
             System.out.println("Problem z zapisem do pliku! " + e.getMessage());
         }
+        System.exit(1);
     }
 
     private static String[][] remove(String[][] tabs) {
