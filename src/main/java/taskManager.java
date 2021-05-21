@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class taskManager {
@@ -123,8 +125,15 @@ public class taskManager {
         //czytam date
         System.out.println("Please add task due date");
         String date;
-
-        date = scanner.nextLine();
+        while (true) {
+            date = scanner.nextLine();
+            try {
+                LocalDate lt = LocalDate.parse(date);
+                break;
+            } catch (DateTimeParseException e) {
+                System.out.println("Błędby format daty wpisz YYYY-MM-DD");
+            }
+        }
 
         // czytam true / false
         System.out.println("Is your task is important: true/false");
