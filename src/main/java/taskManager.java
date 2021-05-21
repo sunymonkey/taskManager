@@ -9,21 +9,23 @@ import java.util.*;
 
 public class taskManager {
     public static void main(String[] args) {
+
         String filename = "tasks.csv";
         String[][] tabs = readFile(filename);
+        Scanner scanner = new Scanner(System.in);
 
         while(true) {
             menuPrint();
-            Scanner scanner = new Scanner(System.in);
             String menu = scanner.nextLine().trim();
             switch (menu) {
                 case "add" -> tabs = add(tabs);
                 case "remove" -> tabs = remove(tabs);
                 case "list" -> list(tabs);
                 case "exit" -> {
+                    scanner.close();
                     quit(tabs, filename);
                 }
-                default -> System.out.println("Błędna komenda");
+                default -> System.out.println(ConsoleColors.RED_BOLD + "Wrong command" + ConsoleColors.RESET);
             }
         }
     }
@@ -49,7 +51,7 @@ public class taskManager {
             Files.write(path, list);
             System.out.println(ConsoleColors.RED + "Bye, Bye.");
         } catch (IOException e) {
-            System.out.println("Problem z zapisem do pliku! " + e.getMessage());
+            System.out.println("Problem with writing to file! " + e.getMessage());
         }
         System.exit(1);
     }
@@ -114,7 +116,7 @@ public class taskManager {
                 LocalDate.parse(date);
                 break;
             } catch (DateTimeParseException e) {
-                System.out.println("Błędny format daty wpisz YYYY-MM-DD");
+                System.out.println("Invalid date format. Enter YYYY-MM-DD");
             }
         }
 
@@ -125,7 +127,7 @@ public class taskManager {
             if (important.equals("true") || important.equals("false")) {
                 break;
             } else {
-                System.out.println("true/false");
+                System.out.println("Invalid format. Enter true or false");
             }
         }
 
