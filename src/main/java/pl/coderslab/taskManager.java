@@ -1,3 +1,5 @@
+package pl.coderslab;
+
 import org.apache.commons.lang3.ArrayUtils;
 import java.io.IOException;
 import java.nio.file.Files;
