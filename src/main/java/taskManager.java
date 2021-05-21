@@ -1,4 +1,5 @@
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,6 +12,7 @@ public class taskManager {
 
         String[][] tabs = readFile("tasks.csv");
         int quit = 0;
+        Scanner scanner = new Scanner(System.in);
 
         while (quit == 0) {
             System.out.println(ConsoleColors.BLUE_BOLD + "Please select an option: ");
@@ -18,8 +20,7 @@ public class taskManager {
             System.out.println("remove");
             System.out.println("list");
             System.out.println("exit");
-            Scanner scanner = new Scanner(System.in);
-            String menu = scanner.nextLine();
+            String menu = scanner.nextLine().trim();
             switch (menu) {
                 case "add":
                     //System.out.println("add");
@@ -115,12 +116,28 @@ public class taskManager {
 
     private static String[][] add(String[][] tabs) {
         Scanner scanner = new Scanner(System.in);
+        //czytam opis
         System.out.println("Please add task description");
-        String description = scanner.nextLine();
+        String description = scanner.nextLine().trim();
+
+        //czytam date
         System.out.println("Please add task due date");
-        String date = scanner.nextLine();
+        String date;
+
+        date = scanner.nextLine();
+
+        // czytam true / false
         System.out.println("Is your task is important: true/false");
-        String important = scanner.nextLine();
+        String important;
+        while (true) {
+            important = scanner.nextLine().trim();
+            if (important.equals("true") || important.equals("false")) {
+                break;
+            } else {
+                System.out.println("true/false");
+            }
+        }
+
         tabs = Arrays.copyOf(tabs, tabs.length+1);
         tabs[tabs.length-1] = new String[3];
         tabs[tabs.length-1][0] = description;
