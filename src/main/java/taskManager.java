@@ -1,61 +1,51 @@
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
+import java.time.*;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class taskManager {
     public static void main(String[] args) {
+        String filename = "task.csv";
+        String[][] tabs = readFile(filename);
+        boolean state = true;
 
-        String[][] tabs = readFile("tasks.csv");
-        int quit = 0;
-        Scanner scanner = new Scanner(System.in);
-
-        while (quit == 0) {
-            System.out.println(ConsoleColors.BLUE_BOLD + "Please select an option: ");
-            System.out.println(ConsoleColors.RESET + "add");
-            System.out.println("remove");
-            System.out.println("list");
-            System.out.println("exit");
+        while(state) {
+            menuPrint();
+            Scanner scanner = new Scanner(System.in);
             String menu = scanner.nextLine().trim();
             switch (menu) {
-                case "add":
-                    //System.out.println("add");
-                    tabs = add(tabs);
-                    break;
-                case "remove":
-                    //System.out.println("remove");
-                    tabs = remove(tabs);
-                    break;
-                case "list":
-                    //System.out.println("list");
-                    list(tabs);
-                    break;
-                case "exit":
-                    //System.out.println("exit");
-                    quit = quit(tabs);
-                    break;
-                default: {
-                    System.out.println("Błędna komenda");
+                case "add" -> tabs = add(tabs);
+                case "remove" -> tabs = remove(tabs);
+                case "list" -> list(tabs);
+                case "exit" -> {
+                    quit(tabs, filename);
+                    state = false;
                 }
+                default -> System.out.println("Błędna komenda");
             }
         }
-
-
     }
 
-    private static int quit(String[][] tabs) {
+    private static void menuPrint(){
+        System.out.println(ConsoleColors.BLUE_BOLD + "Please select an option: ");
+        System.out.println(ConsoleColors.RESET + "add");
+        System.out.println("remove");
+        System.out.println("list");
+        System.out.println("exit");
+    }
+
+    private static void quit(String[][] tabs, String filename) {
         List<String> list = new ArrayList<>();
 
-        for (int i = 0; i < tabs.length; i++) {
-            list.add(tabs[i][0] + ", " + tabs[i][1] + ", " + tabs[i][2]);
+        for (String[] tab : tabs) {
+            list.add(tab[0] + ", " + tab[1] + ", " + tab[2]);
         }
-        Path path = Paths.get("tasks.csv");
+        Path path = Paths.get(filename);
 
         try {
             Files.write(path, list);
@@ -63,15 +53,12 @@ public class taskManager {
         } catch (IOException e) {
             System.out.println("Problem z zapisem do pliku! " + e.getMessage());
         }
-
-        //tasks.csv
-        return 1;
     }
 
     private static String[][] remove(String[][] tabs) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please select number to remove.");
-        int index = 0;
+        int index;
         while (true) {
             try {
                 index = scanner.nextInt();
@@ -93,7 +80,6 @@ public class taskManager {
     private static String[][] readFile(String fileName) {
         Path path = Paths.get(fileName);
 
-        //czytam plik
         String[][] tabs = new String[0][3];
 
         if (Files.exists(path)) {
@@ -118,24 +104,21 @@ public class taskManager {
 
     private static String[][] add(String[][] tabs) {
         Scanner scanner = new Scanner(System.in);
-        //czytam opis
         System.out.println("Please add task description");
         String description = scanner.nextLine().trim();
 
-        //czytam date
         System.out.println("Please add task due date");
         String date;
         while (true) {
             date = scanner.nextLine();
             try {
-                LocalDate lt = LocalDate.parse(date);
+                LocalDate.parse(date);
                 break;
             } catch (DateTimeParseException e) {
-                System.out.println("Błędby format daty wpisz YYYY-MM-DD");
+                System.out.println("Błędny format daty wpisz YYYY-MM-DD");
             }
         }
 
-        // czytam true / false
         System.out.println("Is your task is important: true/false");
         String important;
         while (true) {
@@ -157,7 +140,6 @@ public class taskManager {
     }
 
     private static void list(String[][] tabs) {
-        // wyswietlam liste:
         if (tabs.length == 0) {
             System.out.println(ConsoleColors.RED + "Brak zadań do wykonania!" + ConsoleColors.RESET);
         } else {
