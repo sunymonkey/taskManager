@@ -10,7 +10,7 @@ import java.util.*;
 
 public class taskManager {
     public static void main(String[] args) {
-        String filename = "task.csv";
+        String filename = "tasks.csv";
         String[][] tabs = readFile(filename);
         boolean state = true;
 
@@ -32,6 +32,7 @@ public class taskManager {
     }
 
     private static void menuPrint(){
+        System.out.println();
         System.out.println(ConsoleColors.BLUE_BOLD + "Please select an option: ");
         System.out.println(ConsoleColors.RESET + "add");
         System.out.println("remove");
