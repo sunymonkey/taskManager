@@ -32,8 +32,8 @@ public class taskManager {
 
     private static void menuPrint(){
         System.out.println();
-        System.out.println(ConsoleColors.BLUE_BOLD + "Please select an option: ");
-        System.out.println(ConsoleColors.RESET + "add");
+        System.out.println(ConsoleColors.BLUE_BOLD + "Please select an option: " + ConsoleColors.RESET);
+        System.out.println("add");
         System.out.println("remove");
         System.out.println("list");
         System.out.println("exit");
